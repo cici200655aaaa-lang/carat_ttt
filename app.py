@@ -1,5 +1,4 @@
 from flask import Flask, render_template, request, jsonify
-import os
 
 app = Flask(__name__)
 
@@ -54,7 +53,3 @@ def api_register():
 
     users[username] = password
     return jsonify({"code":200,"msg":"💎 注册成功！快去登录吧～"})
-
-if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port)
