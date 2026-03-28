@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>登录 - CARAT TTT</title>
+<script src="https://cdn.jsdelivr.net/npm/axios@0.27.2/dist/axios.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:"Microsoft YaHei",sans-serif}
+body{background:#fff5f7}
+.header{background:linear-gradient(90deg,#f8bbd0,#f48fb1);color:white;padding:20px;text-align:center}
+.nav{display:flex;justify-content:center;gap:24px;margin:16px 0;flex-wrap:wrap}
+.nav a{color:#d81b60;text-decoration:none;font-weight:bold;padding:8px 14px;border-radius:20px;background:#fce4ec}
+.nav a:hover{background:#f8bbd0;color:white}
+.box{max-width:400px;margin:60px auto;background:white;padding:30px;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.05)}
+.box h2{text-align:center;color:#d81b60;margin-bottom:24px}
+input{width:100%;padding:12px;margin:10px 0;border:1px solid #f8bbd0;border-radius:10px;outline:none}
+button{width:100%;padding:12px;background:#d81b60;color:white;border:none;border-radius:10px;font-size:16px;font-weight:bold;margin-top:10px;cursor:pointer}
+button:hover{background:#c2185b}
+.msg{text-align:center;margin:12px 0;font-weight:bold}
+.success{color:#4a7c59}
+.error{color:#d81b60}
+</style>
+</head>
+<body>
+<div class="header"><h1>登录</h1></div>
+<div class="nav">
+<a href="/">首页</a>
+<a href="/login">登录</a>
+<a href="/register">注册</a>
+<a href="/about">关于本站</a>
+<a href="/carat-island">克拉屿</a>
+</div>
+<div class="box">
+<h2>💎 CARAT 登录</h2>
+<div class="msg" id="msg"></div>
+<input placeholder="用户名" id="username" type="text">
+<input placeholder="密码" id="password" type="password">
+<button onclick="loginSubmit()">立即登录</button>
+</div>
+
+<script>
+async function loginSubmit(){
+    let name = document.getElementById("username").value;
+    let pwd = document.getElementById("password").value;
+    let msgBox = document.getElementById("msg");
+
+    if(!name || !pwd){
+        msgBox.innerText = "请输入用户名和密码！";
+        msgBox.className = "msg error";
+        return;
+    }
+
+    try{
+        let res = await axios.post("/api/login", {
+            username: name,
+            password: pwd
+        });
+
+        if(res.data.code === 200){
+            msgBox.innerText = res.data.msg;
+            msgBox.className = "msg success";
+            setTimeout(()=>{ window.location.href = "/"; }, 1500);
+        }else{
+            msgBox.innerText = res.data.msg;
+            msgBox.className = "msg error";
+        }
+    }catch(err){
+        msgBox.innerText = "登录失败，请稍后重试";
+        msgBox.className = "msg error";
+    }
+}
+</script>
+</body>
+</html>
